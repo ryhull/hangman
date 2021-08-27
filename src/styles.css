@@ -1,0 +1,42 @@
+body {
+    font-family: calibri;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+#letter-area {
+    display:flex;
+    justify-content: center;
+    max-width:425px;
+}
+
+#letter-btns {
+    display:flex;
+    justify-content: center;
+    flex-wrap:wrap;
+}
+
+#letter-btns button {
+    margin-right:10px;
+    margin-bottom:10px;
+}
+
+#score-area, #hint-area, #word-area {
+    width:425px;
+}
+
+#hint-area,
+#word-area {
+    text-align: center;
+}
+
+#word-area {
+    font-size: 28px;
+}
+
+.guessed {
+    opacity: 0.5;
+    pointer-events: none;
+}

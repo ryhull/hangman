@@ -9,12 +9,17 @@
     <link rel="stylesheet" href="src/styles.css" />
 </head>
 <body>
-    <div id="score-area"></div>
+    <div id="score-area">
+        <p>Lives Remaining: <span id="lives">5</span></p>
+        <p>Current Streak: <span id="userStreak">0</span></p>
+        <hr>
+    </div>
     <div id="hint-area"></div>
     <div id="word-area"></div>
     <div id="letter-area">
         <div id="letter-btns"></div>
     </div>
+    <script src="src/words.js"></script>
     <script src="src/app.js"></script>
 </body>
 </html>

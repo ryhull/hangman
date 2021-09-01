@@ -1,20 +1,50 @@
 const hintDiv = document.getElementById("hint-area");
 const wordDiv = document.getElementById("word-area");
 const letterDiv = document.getElementById("letter-btns");
-const livesSpan = document.getElementById("lives");
+const winLoseDiv = document.getElementById("win-lose");
+const guessesSpan = document.getElementById("guesses-remaining");
+const streakSpan = document.getElementById("user-streak");
+const bestStreakSpan = document.getElementById("best-streak");
+const newWordBtn = document.getElementById("new-word-btn");
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWYXZ".split("");
 let lives = 5;
-let userStreak = 0;
+let userStreak;
 let word;
 let hiddenWord;
 
 document.addEventListener("load", initializeWord());
+
+document.addEventListener("load", initializeLS());
+
+function initializeLS() {
+    if (localStorage.getItem("currentStreak") === null) {
+        localStorage.setItem("currentStreak", 0);
+        streakSpan.innerText = 0;
+        userStreak = 0;
+    } else {
+        streakSpan.innerText = localStorage.getItem("currentStreak");
+        userStreak = localStorage.getItem("currentStreak");
+    }
+    if (localStorage.getItem("bestStreak") === null) {
+        localStorage.setItem("bestStreak", 0);
+        bestStreakSpan.innerText = 0;
+    } else {
+        bestStreakSpan.innerText = localStorage.getItem("bestStreak");
+    }
+}
 
 for (let letter of letters) createLetterBtn(letter);
 const letterBtns = document.getElementsByClassName("letter-btn");
 for (let btn of letterBtns) {
     btn.addEventListener("click", guessLetter);
 }
+
+newWordBtn.addEventListener("click", () => {
+    initializeWord();
+    for (let btn of letterBtns) btn.classList.remove("guessed");
+    lives = 5;
+    guessesSpan.innerText = lives;
+});
 
 function createLetterBtn(letter) {
     let btn = document.createElement("button");
@@ -48,9 +78,16 @@ function guessLetter(e) {
                     hiddenWord.slice(i + 1, word.length + 2);
                 wordDiv.innerHTML = `<p>${hiddenWord}</p>`;
                 if (hiddenWord.search("_") < 0) {
-                    console.log("WINRAR");
+                    /*--------------------------------WINNING CONDITION--------------------------------*/
                     for (let btn of letterBtns) btn.classList.add("guessed");
-                    //TODO - Winning Condition things--------------------------------------
+                    userStreak++;
+                    localStorage.setItem("currentStreak", userStreak);
+                    streakSpan.innerText = userStreak;
+                    if (userStreak > bestStreakSpan.innerText) {
+                        bestStreakSpan.innerText = userStreak;
+                        localStorage.setItem("bestStreak", userStreak);
+                    }
+                    alert("You got it!");
                 }
             }
         }
@@ -58,11 +95,14 @@ function guessLetter(e) {
         console.log("oof");
         lives--;
         if (lives < 0) {
-            console.log("Depressing loss :'(");
-            // TODO - Losing Condition things ---------------------------------------------
+            /*--------------------------------LOSING CONDITION--------------------------------*/
             for (let btn of letterBtns) btn.classList.add("guessed");
-        } else livesSpan.innerText = lives;
+            userStreak = 0;
+            localStorage.setItem("currentStreak", userStreak);
+            streakSpan.innerText = userStreak;
+            wordDiv.innerHTML = `<p>${word}</p>`;
+            alert("You have run out of guesses :(");
+        } else guessesSpan.innerText = lives;
     }
     btn.classList.add("guessed");
 }
-

@@ -32,6 +32,12 @@ body {
     transform:translateX(4px);
 }
 
+#score-area {
+    border-bottom:solid 1px black;
+    padding-bottom:15px;
+    text-align:center;
+}
+
 #score-area, #hint-area, #word-area {
     width:var(--game-width);
 }
@@ -46,6 +52,10 @@ body {
     font-family:lucida console, courier new;
     letter-spacing:5px;
     cursor:default;
+}
+
+#guesses-remaining {
+    font-weight: bold;
 }
 
 .guessed {

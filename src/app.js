@@ -1,18 +1,18 @@
-const hintDiv = document.getElementById("hint-area");
-const wordDiv = document.getElementById("word-area");
+const quoteDiv = document.getElementById("quote-area");
+const movieDiv = document.getElementById("movie-area");
 const letterDiv = document.getElementById("letter-btns");
 const winLoseDiv = document.getElementById("win-lose");
 const guessesSpan = document.getElementById("guesses-remaining");
 const streakSpan = document.getElementById("user-streak");
 const bestStreakSpan = document.getElementById("best-streak");
-const newWordBtn = document.getElementById("new-word-btn");
+const newMovieBtn = document.getElementById("new-movie-btn");
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWYXZ".split("");
-let lives = 5;
+let guesses = 3;
 let userStreak;
-let word;
-let hiddenWord;
+let movie;
+let hiddenTitle;
 
-document.addEventListener("load", initializeWord());
+document.addEventListener("load", initializeMovie());
 
 document.addEventListener("load", initializeLS());
 
@@ -39,11 +39,11 @@ for (let btn of letterBtns) {
     btn.addEventListener("click", guessLetter);
 }
 
-newWordBtn.addEventListener("click", () => {
-    initializeWord();
+newMovieBtn.addEventListener("click", () => {
+    initializeMovie();
     for (let btn of letterBtns) btn.classList.remove("guessed");
-    lives = 5;
-    guessesSpan.innerText = lives;
+    guesses = 3;
+    guessesSpan.innerText = guesses;
 });
 
 function createLetterBtn(letter) {
@@ -53,31 +53,31 @@ function createLetterBtn(letter) {
     letterDiv.append(btn);
 }
 
-function initializeWord() {
-    let index = Math.floor(Math.random() * WORD_LIST.length);
-    word = WORD_LIST[index].word;
-    // Creating the blank spaces for the hidden word
-    hiddenWord = "";
-    for (let i = 0; i < word.length; i++) {
-        if (word[i] != " ") hiddenWord += "_";
-        else hiddenWord += " ";
+function initializeMovie() {
+    let index = Math.floor(Math.random() * MOVIE_LIST.length);
+    movie = MOVIE_LIST[index].title;
+    // Creating the blank spaces for the hidden title
+    hiddenTitle = "";
+    for (let i = 0; i < movie.length; i++) {
+        if (movie[i] != " ") hiddenTitle += "_";
+        else hiddenTitle += " ";
     }
-    wordDiv.innerHTML = `<p>${hiddenWord}</p>`;
-    hintDiv.innerHTML = `<p>Hint: ${WORD_LIST[index].hint}</p>`;
+    movieDiv.innerHTML = `<p>${hiddenTitle}</p>`;
+    quoteDiv.innerHTML = `<p>"${MOVIE_LIST[index].quote}"</p>`;
 }
 
 function guessLetter(e) {
     let btn = e.target;
     let letter = btn.innerText;
-    if (word.search(letter) >= 0) {
-        for (let i = 0; i < word.length; i++) {
-            if (word[i] === letter) {
-                hiddenWord =
-                    hiddenWord.slice(0, i) +
+    if (movie.search(letter) >= 0) {
+        for (let i = 0; i < movie.length; i++) {
+            if (movie[i] === letter) {
+                hiddenTitle =
+                    hiddenTitle.slice(0, i) +
                     letter +
-                    hiddenWord.slice(i + 1, word.length + 2);
-                wordDiv.innerHTML = `<p>${hiddenWord}</p>`;
-                if (hiddenWord.search("_") < 0) {
+                    hiddenTitle.slice(i + 1, movie.length + 2);
+                movieDiv.innerHTML = `<p>${hiddenTitle}</p>`;
+                if (hiddenTitle.search("_") < 0) {
                     /*--------------------------------WINNING CONDITION--------------------------------*/
                     for (let btn of letterBtns) btn.classList.add("guessed");
                     userStreak++;
@@ -93,16 +93,16 @@ function guessLetter(e) {
         }
     } else {
         console.log("oof");
-        lives--;
-        if (lives < 0) {
+        guesses--;
+        if (guesses < 1) {
             /*--------------------------------LOSING CONDITION--------------------------------*/
             for (let btn of letterBtns) btn.classList.add("guessed");
             userStreak = 0;
             localStorage.setItem("currentStreak", userStreak);
             streakSpan.innerText = userStreak;
-            wordDiv.innerHTML = `<p>${word}</p>`;
+            movieDiv.innerHTML = `<p>${movie}</p>`;
             alert("You have run out of guesses :(");
-        } else guessesSpan.innerText = lives;
+        } else guessesSpan.innerText = guesses;
     }
     btn.classList.add("guessed");
 }

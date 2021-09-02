@@ -4,10 +4,12 @@
 
 body {
     font-family: calibri;
+    font-size:17px;
     display:flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f9f9f9;
+    background-color: #060d17;
+    color:#dbdee8;
 }
 
 #letter-area {
@@ -33,21 +35,21 @@ body {
 }
 
 #score-area {
-    border-bottom:solid 1px black;
+    border-bottom:solid 1px #dbdee8;
     padding-bottom:15px;
     text-align:center;
 }
 
-#score-area, #hint-area, #word-area {
-    width:var(--game-width);
+#score-area, #quote-area, #movie-area {
+    min-width:var(--game-width);
 }
 
-#hint-area,
-#word-area {
+#quote-area,
+#movie-area {
     text-align: center;
 }
 
-#word-area {
+#movie-area {
     font-size: 28px;
     font-family:lucida console, courier new;
     letter-spacing:5px;

@@ -2,12 +2,13 @@ const quoteDiv = document.getElementById("quote-area");
 const movieDiv = document.getElementById("movie-area");
 const letterDiv = document.getElementById("letter-btns");
 const winLoseDiv = document.getElementById("win-lose");
-const guessesSpan = document.getElementById("guesses-remaining");
+const livesSpan = document.getElementById("lives-remaining");
 const streakSpan = document.getElementById("user-streak");
 const bestStreakSpan = document.getElementById("best-streak");
 const newMovieBtn = document.getElementById("new-movie-btn");
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWYXZ".split("");
-let guesses = 3;
+let prevIndex = [];
+let lives = 3;
 let userStreak;
 let movie;
 let hiddenTitle;
@@ -42,8 +43,9 @@ for (let btn of letterBtns) {
 newMovieBtn.addEventListener("click", () => {
     initializeMovie();
     for (let btn of letterBtns) btn.classList.remove("guessed");
-    guesses = 3;
-    guessesSpan.innerText = guesses;
+    lives = 3;
+    livesSpan.innerText = lives;
+    newMovieBtn.style.display = "none";
 });
 
 function createLetterBtn(letter) {
@@ -54,7 +56,13 @@ function createLetterBtn(letter) {
 }
 
 function initializeMovie() {
-    let index = Math.floor(Math.random() * MOVIE_LIST.length);
+    let index;
+    do {
+        index = Math.floor(Math.random() * MOVIE_LIST.length);
+    } while (prevIndex.includes(index));
+    // Remove the first element of the array each round when it gets too large
+    if (prevIndex.length == 10) {prevIndex.shift()}
+    prevIndex.push(index)
     movie = MOVIE_LIST[index].title;
     // Creating the blank spaces for the hidden title
     hiddenTitle = "";
@@ -80,6 +88,7 @@ function guessLetter(e) {
                 if (hiddenTitle.search("_") < 0) {
                     /*--------------------------------WINNING CONDITION--------------------------------*/
                     for (let btn of letterBtns) btn.classList.add("guessed");
+                    newMovieBtn.style.display = "initial";
                     userStreak++;
                     localStorage.setItem("currentStreak", userStreak);
                     streakSpan.innerText = userStreak;
@@ -92,17 +101,17 @@ function guessLetter(e) {
             }
         }
     } else {
-        console.log("oof");
-        guesses--;
-        if (guesses < 1) {
+        lives--;
+        if (lives < 1) {
             /*--------------------------------LOSING CONDITION--------------------------------*/
             for (let btn of letterBtns) btn.classList.add("guessed");
+            newMovieBtn.style.display = "initial";
             userStreak = 0;
             localStorage.setItem("currentStreak", userStreak);
             streakSpan.innerText = userStreak;
             movieDiv.innerHTML = `<p>${movie}</p>`;
-            alert("You have run out of guesses :(");
-        } else guessesSpan.innerText = guesses;
+            alert("You have run out of lives :(");
+        } else livesSpan.innerText = lives;
     }
     btn.classList.add("guessed");
 }

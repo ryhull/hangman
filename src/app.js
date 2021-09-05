@@ -102,7 +102,7 @@ function guessLetter(e) {
         }
     } else {
         lives--;
-        if (lives < 1) {
+        if (lives < 0) {
             /*--------------------------------LOSING CONDITION--------------------------------*/
             for (let btn of letterBtns) btn.classList.add("guessed");
             newMovieBtn.style.display = "initial";

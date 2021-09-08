@@ -57,7 +57,7 @@ body {
     cursor:default;
 }
 
-#lives-remaining {
+#guesses-remaining {
     font-weight: bold;
 }
 

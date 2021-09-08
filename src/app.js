@@ -2,13 +2,40 @@ const quoteDiv = document.getElementById("quote-area");
 const movieDiv = document.getElementById("movie-area");
 const letterDiv = document.getElementById("letter-btns");
 const winLoseDiv = document.getElementById("win-lose");
-const livesSpan = document.getElementById("lives-remaining");
+const guessesSpan = document.getElementById("guesses-remaining");
 const streakSpan = document.getElementById("user-streak");
 const bestStreakSpan = document.getElementById("best-streak");
 const newMovieBtn = document.getElementById("new-movie-btn");
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWYXZ".split("");
+const letters = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "Y",
+    "X",
+    "Z",
+];
 let prevIndex = [];
-let lives = 3;
+let guesses = 5;
 let userStreak;
 let movie;
 let hiddenTitle;
@@ -43,8 +70,8 @@ for (let btn of letterBtns) {
 newMovieBtn.addEventListener("click", () => {
     initializeMovie();
     for (let btn of letterBtns) btn.classList.remove("guessed");
-    lives = 3;
-    livesSpan.innerText = lives;
+    guesses = 5;
+    guessesSpan.innerText = guesses;
     newMovieBtn.style.display = "none";
 });
 
@@ -61,8 +88,10 @@ function initializeMovie() {
         index = Math.floor(Math.random() * MOVIE_LIST.length);
     } while (prevIndex.includes(index));
     // Remove the first element of the array each round when it gets too large
-    if (prevIndex.length == 10) {prevIndex.shift()}
-    prevIndex.push(index)
+    if (prevIndex.length == 10) {
+        prevIndex.shift();
+    }
+    prevIndex.push(index);
     movie = MOVIE_LIST[index].title;
     // Creating the blank spaces for the hidden title
     hiddenTitle = "";
@@ -101,8 +130,8 @@ function guessLetter(e) {
             }
         }
     } else {
-        lives--;
-        if (lives < 0) {
+        guesses--;
+        if (guesses == 0) {
             /*--------------------------------LOSING CONDITION--------------------------------*/
             for (let btn of letterBtns) btn.classList.add("guessed");
             newMovieBtn.style.display = "initial";
@@ -110,8 +139,9 @@ function guessLetter(e) {
             localStorage.setItem("currentStreak", userStreak);
             streakSpan.innerText = userStreak;
             movieDiv.innerHTML = `<p>${movie}</p>`;
-            alert("You have run out of lives :(");
-        } else livesSpan.innerText = lives;
+            guessesSpan.innerText = guesses;
+            alert("You have run out of guesses :(");
+        } else guessesSpan.innerText = guesses;
     }
     btn.classList.add("guessed");
 }

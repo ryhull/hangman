@@ -1,39 +1,12 @@
 const quoteDiv = document.getElementById("quote-area");
 const movieDiv = document.getElementById("movie-area");
-const letterDiv = document.getElementById("letter-btns");
+const letterDiv = document.getElementById("letter-btn-container");
 const winLoseDiv = document.getElementById("win-lose");
 const guessesSpan = document.getElementById("guesses-remaining");
 const streakSpan = document.getElementById("user-streak");
 const bestStreakSpan = document.getElementById("best-streak");
 const newMovieBtn = document.getElementById("new-movie-btn");
-const letters = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "Y",
-    "X",
-    "Z",
-];
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
 let prevIndex = [];
 let guesses = 5;
 let userStreak;
@@ -71,7 +44,7 @@ newMovieBtn.addEventListener("click", () => {
     initializeMovie();
     for (let btn of letterBtns) btn.classList.remove("guessed");
     guesses = 5;
-    guessesSpan.innerText = guesses;
+    guessesSpan.innerText = getHearts(guesses);
     newMovieBtn.style.display = "none";
 });
 
@@ -109,6 +82,7 @@ function guessLetter(e) {
     if (movie.search(letter) >= 0) {
         for (let i = 0; i < movie.length; i++) {
             if (movie[i] === letter) {
+                btn.classList.add("correct");
                 hiddenTitle =
                     hiddenTitle.slice(0, i) +
                     letter +
@@ -130,6 +104,7 @@ function guessLetter(e) {
             }
         }
     } else {
+        btn.classList.add("incorrect");
         guesses--;
         if (guesses == 0) {
             /*--------------------------------LOSING CONDITION--------------------------------*/
@@ -139,9 +114,20 @@ function guessLetter(e) {
             localStorage.setItem("currentStreak", userStreak);
             streakSpan.innerText = userStreak;
             movieDiv.innerHTML = `<p>${movie}</p>`;
-            guessesSpan.innerText = guesses;
+            guessesSpan.innerText = getHearts(guesses);
             alert("You have run out of guesses :(");
-        } else guessesSpan.innerText = guesses;
+        } else guessesSpan.innerText = getHearts(guesses);
     }
+    setTimeout(() => {
+        btn.classList.remove("correct");
+        btn.classList.remove("incorrect");
+    }, 150)
     btn.classList.add("guessed");
+}
+
+function getHearts(lives) {
+    let hearts = "";
+    for (let i = 0; i < lives; i++)
+        hearts += "♥ ";
+    return hearts.trim();
 }

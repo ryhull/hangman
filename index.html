@@ -10,19 +10,25 @@
 </head>
 <body>
     <div id="score-area">
-            <p>Guesses Remaining: <span id="guesses-remaining">5</span></p>
-            <p>Current Streak: <span id="user-streak"></span></p>
-            <p>Best Streak: <span id="best-streak"></span></p>
+        <div>
+            <p>SCORE</p>
+            <p id="user-streak"></p>
+        </div>
+        <p id="guesses-remaining">♥ ♥ ♥ ♥ ♥</p>
+        <div>
+            <p>BEST</p>
+            <p id="best-streak"></p>
+        </div>
     </div>
     <div id="quote-area"></div>
     <div id="movie-area"></div>
     <div id="letter-area">
-        <div id="letter-btns"></div>
+        <div id="letter-btn-container"></div>
     </div>
     <div id="win-lose">
         <button id="new-movie-btn">New Movie</button>
     </div>
-    <script src="src/movies.js"></script>
+    <script src="src/data.js"></script>
     <script src="src/app.js"></script>
 </body>
 </html>
